@@ -38,16 +38,15 @@
   </div>
 
   <script>
-    async function sendCommand(cmd) {
-      try {
-        // ⚠️ On mettra l’IP du PC quand le backend sera prêt
-        let response = await fetch(`http://localhost:5000/${cmd}`);
-        let text = await response.text();
-        document.getElementById("status").innerText = "Commande envoyée : " + cmd;
-      } catch (err) {
-        document.getElementById("status").innerText = "⚠️ Erreur de connexion";
-      }
-    }
+   async function sendCommand(cmd) {
+   try {
+     let response = await fetch(`http://192.168.1.71:5000/${cmd}`);
+     let text = await response.text();
+     document.getElementById("status").innerText = "Commande envoyée : " + cmd;
+   } catch (err) {
+     document.getElementById("status").innerText = "⚠️ Erreur de connexion";
+   }
+}
   </script>
 </body>
 </html>
