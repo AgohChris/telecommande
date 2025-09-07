@@ -1,29 +1,48 @@
 from flask import Flask
-import pyautogui
 import os
-
+import platform
 
 app = Flask(__name__)
 
+# --- Helpers pour envoyer les touches ---
+def press_key(key):
+    system = platform.system()
+    if system == "Darwin":  # macOS
+        keycodes = {
+            "right": 124,   # Flèche droite
+            "left": 123,    # Flèche gauche
+            "f5": 96,       # F5
+            "esc": 53       # Escape
+        }
+        if key in keycodes:
+            os.system(f'''osascript -e 'tell application "System Events" to key code {keycodes[key]}' ''')
+    else:  # Windows/Linux → pyautogui
+        import pyautogui
+        pyautogui.press(key)
+
+
 @app.route("/next")
 def next_slide():
-    pyautogui.press("right")   # Flèche droite = slide suivante
-    return "Slide suivante"
+    press_key("right")
+    return "➡️ Slide suivante"
+
 
 @app.route("/prev")
 def prev_slide():
-    pyautogui.press("left")    # Flèche gauche = slide précédente
-    return "Slide précédente"
+    press_key("left")
+    return "⬅️ Slide précédente"
+
 
 @app.route("/play")
 def play():
-    pyautogui.press("f5")      # F5 = démarrer diaporama
-    return "Diaporama lancé"
+    press_key("f5")
+    return "▶️ Diaporama lancé"
+
 
 @app.route("/stop")
 def stop():
-    pyautogui.press("esc")     # Esc = quitter diaporama
-    return "Diaporama arrêté"
+    press_key("esc")
+    return "⏹️ Diaporama arrêté"
 
 
 if __name__ == "__main__":
